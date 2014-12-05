@@ -1,23 +1,101 @@
 ﻿$(function () {
-    
+    /**
+    * Main view of the Jquery image gallery. Mainly appends and destroys the big image apart from binding various events
+    * @class JqueryImageGalleryView
+    * @constructor
+    * @public
+    */
+    var JqueryImageGalleryView = (function () {
+        return {
+            /**
+            * Stores which image was previously clicked. (To remove the big image)
+            * @property previousImage
+            * @type Number
+            * @default null
+            */
+            previousImage: null,
+            /**
+            * Renders the view. Should be main entry point Can be replaced by a constructor
+            * @method render
+            * @public
+            */
+            render: function render() {
+                this._bindEvents();
+            },
+            /**
+            * Binds the events on the main images (Not the big image)
+            * @method _bindEvents
+            * @private
+            */
+            _bindEvents: function _bindEvents() {
+                $('.image-container').on('click', $.proxy(this._onImageClick, this));
+            },
+            /**
+            * Handles the click event of the image
+            * @method _onImageClick
+            * @param event{Object} The event object
+            * @private
+            */
+            _onImageClick: function _onImageClick(event) {
+                console.log('image clicked');
 
-    function render() {
-        _bindEvents();
-    }
+                this._appendBigImageDiv(event);
+            },
+            /**
+            * Appends the big image div at appropriate location
+            * @method _appendBigImageDiv
+            * @private
+            */
+            _appendBigImageDiv: function _appendBigImageDiv(event) {
+                var $bigImageDiv = this._getBigImageDiv(),
+                    $currentTarget = $(event.currentTarget),
+                    currentImageNo, imageWidth = $currentTarget.width(),
+                    parentContainerWidth = $currentTarget.parent().width(),
+                    imagesInARow = parentContainerWidth / imageWidth;
 
-    function _bindEvents() {
-        $('.image-container').on('click', _onImageClick);
-    }
+                currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
+                console.log('current image is:' + currentImageNo);
 
-    function _onImageClick(event) {
-        console.log('image clicked');
-        var $a = _getBigImageDiv();
-    }
+                // removing the previous big container
+                if (this.previousImage !== currentImageNo) {
+                    this._removeBigImage();
+                    this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
+                    this.previousImage = currentImageNo;
+                    // bind events on the big image
+                }
+            },
+            /**
+            * Returns the big image div
+            * @method _getBigImageDiv
+            * @public
+            */
+            _getBigImageDiv: function _getBigImageDiv() {
+                var $bigImage = $('<div  id="big-image-container" class="big-image-container"></div>');
+                return $bigImage;
+            },
+            /**
+            * Appends the big div after the specified div no
+            * @method _appendImageAfter
+            * @param imageDiv {Object} The div to append
+            * @param imageNo {Number} The image no after which the specified div is to be appended
+            * @public
+            */
+            _appendImageAfter: function _appendImageAfter(imageDiv, imageNo) {
+                imageDiv.insertAfter($('.image-container-' + imageNo));
+                $('.big-image-container').css('height','0px').animate({'height':'660px'});
+                // Is scrolling to that div necessary....yes
+                // Animation needs to be smoother...also refer the urls
+            },
+            /**
+            * Removes the big image
+            * @method _removeBigImage
+            * @private
+            */
+            _removeBigImage: function _removeBigImage() {
+                $('.big-image-container').remove();
+            }
+        }
+    })();
 
-    function _getBigImageDiv() {
-        var $bigImage = $('<div  id="big-image-container" class="big-image-container"></div>');
-        return $bigImage;
-    }
-
-    render();
+    JqueryImageGalleryView.render();
 });
