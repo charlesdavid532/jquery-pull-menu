@@ -15,7 +15,21 @@
             */
             previousImage: null,
             /**
-            * Renders the view. Should be main entry point Can be replaced by a constructor
+            * Stores which image no was currently clicked. (To add the big image)
+            * @property currentImageNo
+            * @type Number
+            * @default null
+            */
+            currentImageNo: null,
+            /**
+            * Stores which image was currently clicked. (To add the big image)
+            * @property currentImage
+            * @type Number
+            * @default null
+            */
+            currentImage: null,
+            /**
+            * Renders the view. Should be main entry point Can be replaced by a constructorhttp://localhost:59845/jquery-pull-menu
             * @method render
             * @public
             */
@@ -29,6 +43,7 @@
             */
             _bindEvents: function _bindEvents() {
                 $('.image-container').on('click', $.proxy(this._onImageClick, this));
+               // $(document).on(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE, $.proxy(this._onRemoveAnimationComplete, this));
             },
             /**
             * Handles the click event of the image
@@ -47,21 +62,17 @@
             * @private
             */
             _appendBigImageDiv: function _appendBigImageDiv(event) {
-                var $bigImageDiv = this._getBigImageDiv(),
-                    $currentTarget = $(event.currentTarget),
-                    currentImageNo, imageWidth = $currentTarget.width(),
-                    parentContainerWidth = $currentTarget.parent().width(),
-                    imagesInARow = parentContainerWidth / imageWidth;
+                var $currentTarget = $(event.currentTarget),
+                    currentImageNo;
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
+                this.currentImage = $currentTarget;
                 console.log('current image is:' + currentImageNo);
 
                 // removing the previous big container
                 if (this.previousImage !== currentImageNo) {
                     this._removeBigImage();
-                    this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
-                    this.previousImage = currentImageNo;
-                    // bind events on the big image
+                    this._onRemoveAnimationComplete();
                 }
             },
             /**
@@ -82,8 +93,8 @@
             */
             _appendImageAfter: function _appendImageAfter(imageDiv, imageNo) {
                 imageDiv.insertAfter($('.image-container-' + imageNo));
-                $('.big-image-container').css('height', '0px').animate({ 'height': '660px' },1000, function () {
-                  //  $(window).scrollTop($(this).offset().top);
+                $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
+                    //  $(window).scrollTop($(this).offset().top);
                 });
                 // Is scrolling to that div necessary....yes
                 // Animation needs to be smoother...also refer the urls
@@ -94,10 +105,36 @@
             * @private
             */
             _removeBigImage: function _removeBigImage() {
-                $('.big-image-container').remove();
+                var $bigImageContainer = $('.big-image-container');
+
+                if ($bigImageContainer.length !== 0) {
+                    $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                        $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
+                        $(this).remove();
+                    });
+                } else {
+                    $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
+                }
+            },
+            /**
+            * Handles the event of remove animation complete
+            * @method _onRemoveAnimationComplete
+            * @private
+            */
+            _onRemoveAnimationComplete: function _onRemoveAnimationComplete(event) {
+                var $bigImageDiv = this._getBigImageDiv(),
+                    $currentTarget = this.currentImage,
+                    currentImageNo, imageWidth = $currentTarget.width(),
+                    parentContainerWidth = $currentTarget.parent().width(),
+                    imagesInARow = parentContainerWidth / imageWidth;
+
+                currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
+                this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
+                this.previousImage = currentImageNo;
+                // bind events on the big image
             }
         }
     })();
-
+    JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE = 'remove-animation-complete';
     JqueryImageGalleryView.render();
 });
