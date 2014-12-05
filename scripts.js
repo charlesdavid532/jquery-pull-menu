@@ -106,7 +106,7 @@
             */
             _removeBigImage: function _removeBigImage() {
                 var $bigImageContainer = $('.big-image-container');
-
+                /*
                 if ($bigImageContainer.length !== 0) {
                     $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
                         $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
@@ -115,6 +115,8 @@
                 } else {
                     $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
                 }
+                */
+                $bigImageContainer.remove();
             },
             /**
             * Handles the event of remove animation complete
