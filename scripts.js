@@ -97,14 +97,18 @@
                     $currentTarget = this.currentImage,
                     imageTop = $currentTarget.position().top,
                     imageHeight = $currentTarget.height(),
-                    bigImageHeight = JqueryImageGalleryView.BIG_IMAGE_HEIGHT;
+                    bigImageHeight = JqueryImageGalleryView.BIG_IMAGE_HEIGHT,
+                    previousImageScrollTop = 0;
 
-
+                // Check to see if there was a previous image and then reduce that from the scroll top
+                if (this.previousImage !== null && this.previousImage !== undefined) {
+                    previousImageScrollTop = 660;
+                }
                 imageDiv.insertAfter($('.image-container-' + imageNo));
                 if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
                     $('.big-image-container').css('height', '660px')
                     $('html, body').animate({
-                        scrollTop: imageTop - 40 + imageHeight
+                        scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
                     }, 1000);
                 } else {
                     $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
@@ -133,10 +137,10 @@
                 $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
                 }
                 */
-                //$bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
-                //  $(this).remove();
-                //});
-                $bigImageContainer.remove();
+                $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                    $(this).remove();
+                });
+                //$bigImageContainer.remove();
             },
             /**
             * Handles the event of remove animation complete
