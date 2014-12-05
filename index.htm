@@ -1,0 +1,86 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>CSS Menu</title>
+
+    <style type="text/css">
+        .container {
+            margin: auto;
+            width: 306px;
+            background-color: yellow;
+        }
+
+        .image-gallery-container {
+            position: absolute;
+            top: 0px;
+            margin: auto;
+            width: 306px;
+        }
+        
+         .image-container {
+            width: 100px;
+            height: 100px;
+            background-color: gray;
+            border: 1px solid black;
+            float: left;
+            list-style-type: none;
+        }
+
+        .image-text-container {
+            position: relative;
+            top: 70px;
+            left: 10px;
+            height: 20px;
+            width: 80px;
+            border: 1px solid black;
+        }
+
+        .big-image-container {
+            height: 100px;
+            width: 306px;
+            background-color: blue;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            float: left;
+        }
+
+        .big-image-container.no-display {
+            display: none;
+        }
+    </style>
+    <script src="vendor/jquery.min.js"></script>
+    <script src="scripts.js"></script>
+</head>
+<body>
+    <div id="container" class="container">
+        <div id="image-gallery-container" class="image-gallery-container">
+            <div id="image-gallery-container-ul" class="image-gallery-container-ul">
+                <div id="image-container-0" class="image-container-0 image-container">
+                    <div id="image-text-container-0" class="image-text-container-0 image-text-container">
+                        <div id="image-text-text-0" class="image-text-text-0 image-text-text">Text</div>
+                    </div>
+                </div>
+                <div id="image-container-1" class="image-container-1 image-container">
+                    <div id="image-text-container-1" class="image-text-container-1 image-text-container">
+                        <div id="image-text-text-1" class="image-text-text-1 image-text-text">Text</div>
+                    </div>
+                </div>
+                <div id="image-container-2" class="image-container-2 image-container">
+                    <div id="image-text-container-2" class="image-text-container-2 image-text-container">
+                        <div id="image-text-text-2" class="image-text-text-2 image-text-text">Text</div>
+                    </div>
+                </div>
+                <div id="image-container-3" class="image-container-3 image-container">
+                    <div id="image-text-container-3" class="image-text-container-3 image-text-container">
+                        <div id="image-text-text-3" class="image-text-text-3 image-text-text">Text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+</html>
