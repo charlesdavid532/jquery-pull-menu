@@ -43,7 +43,7 @@
             */
             _bindEvents: function _bindEvents() {
                 $('.image-container').on('click', $.proxy(this._onImageClick, this));
-               // $(document).on(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE, $.proxy(this._onRemoveAnimationComplete, this));
+                // $(document).on(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE, $.proxy(this._onRemoveAnimationComplete, this));
             },
             /**
             * Handles the click event of the image
@@ -92,12 +92,29 @@
             * @public
             */
             _appendImageAfter: function _appendImageAfter(imageDiv, imageNo) {
+                var screenHeight = screen.height,
+                    currentScrollTop = $(document).scrollTop(),
+                    $currentTarget = this.currentImage,
+                    imageTop = $currentTarget.position().top,
+                    imageHeight = $currentTarget.height(),
+                    bigImageHeight = JqueryImageGalleryView.BIG_IMAGE_HEIGHT;
+
+
                 imageDiv.insertAfter($('.image-container-' + imageNo));
-                $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
-                    //  $(window).scrollTop($(this).offset().top);
-                });
+                if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
+                    $('.big-image-container').css('height', '660px')
+                    $('html, body').animate({
+                        scrollTop: imageTop - 40 + imageHeight
+                    }, 1000);
+                } else {
+                    $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
+                        //  $(window).scrollTop($(this).offset().top);
+
+                    });
+                }
                 // Is scrolling to that div necessary....yes
                 // Animation needs to be smoother...also refer the urls
+
             },
             /**
             * Removes the big image
@@ -108,14 +125,17 @@
                 var $bigImageContainer = $('.big-image-container');
                 /*
                 if ($bigImageContainer.length !== 0) {
-                    $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
-                        $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
-                        $(this).remove();
-                    });
+                $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
+                $(this).remove();
+                });
                 } else {
-                    $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
+                $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
                 }
                 */
+                //$bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                //  $(this).remove();
+                //});
                 $bigImageContainer.remove();
             },
             /**
@@ -138,5 +158,6 @@
         }
     })();
     JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE = 'remove-animation-complete';
+    JqueryImageGalleryView.BIG_IMAGE_HEIGHT = 660;
     JqueryImageGalleryView.render();
 });
