@@ -106,12 +106,16 @@
                     previousImageScrollTop = 660;
                 }
                 imageDiv.insertAfter($('.image-container-' + imageNo));
+                // Animating the scroll
+                $('html, body').animate({
+                    scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
+                }, 1000);
                 if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
-                    $('.big-image-container').css('height', '660px')
-                    $('html, body').animate({
-                        scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
-                    }, 1000);
+                    // Not animating the div
+                    $('.big-image-container').css('height', '660px');
+
                 } else {
+                    // Animating the div
                     $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
                         //  $(window).scrollTop($(this).offset().top);
 
