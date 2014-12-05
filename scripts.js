@@ -82,7 +82,9 @@
             */
             _appendImageAfter: function _appendImageAfter(imageDiv, imageNo) {
                 imageDiv.insertAfter($('.image-container-' + imageNo));
-                $('.big-image-container').css('height','0px').animate({'height':'660px'});
+                $('.big-image-container').css('height', '0px').animate({ 'height': '660px' },1000, function () {
+                  //  $(window).scrollTop($(this).offset().top);
+                });
                 // Is scrolling to that div necessary....yes
                 // Animation needs to be smoother...also refer the urls
             },
