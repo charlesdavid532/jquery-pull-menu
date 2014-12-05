@@ -101,7 +101,8 @@
                     previousImageScrollTop = 0;
 
                 // Check to see if there was a previous image and then reduce that from the scroll top
-                if (this.previousImage !== null && this.previousImage !== undefined) {
+                if (this.previousImage !== null && this.previousImage !== undefined &&
+                    this.previousImage < imageNo && this._isDifferentRow(this.previousImage, imageNo, this.currentImage)) {
                     previousImageScrollTop = 660;
                 }
                 imageDiv.insertAfter($('.image-container-' + imageNo));
@@ -158,6 +159,22 @@
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
                 this.previousImage = currentImageNo;
                 // bind events on the big image
+            },
+            /**
+            * Returns whether the 2 images are on different rows or not
+            * @method _isDifferentRow
+            * @private
+            */
+            _isDifferentRow: function _isDifferentRow(image1, image2, $currentTarget) {
+                var imageWidth = $currentTarget.width(),
+                    parentContainerWidth = $currentTarget.parent().width(),
+                    imagesInARow = parentContainerWidth / imageWidth;
+
+                if (Math.floor(image1 / imagesInARow) === Math.floor(image2 / imagesInARow)) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
     })();
