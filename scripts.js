@@ -83,7 +83,7 @@
             * @public
             */
             _getBigImageDiv: function _getBigImageDiv() {
-                var $bigImage = $('<div  id="big-image-container" class="big-image-container"><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0 thumbnail">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1 thumbnail">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2 thumbnail">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3 thumbnail">D</div></div></div></div>');
+                var $bigImage = $('<div  id="big-image-container" class="big-image-container"><div id="arrow-container" class="arrow-container"></div><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0 thumbnail">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1 thumbnail">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2 thumbnail">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3 thumbnail">D</div></div></div></div>');
                 return $bigImage;
             },
             /**
@@ -135,7 +135,7 @@
                     // TODO:: Should add a check here to see if the previous image is not visible I can animate
                 } else {
                     // Animating the div
-                    $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
+                    $('.big-image-container').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
                         //  $(window).scrollTop($(this).offset().top);
                         console.log('added');
 
@@ -178,6 +178,7 @@
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
+                this._setArrowPosition(currentImageNo % imagesInARow);
                 this.previousImage = currentImageNo;
                 // bind events on the big image
                 this._bindBigImageEvents();
@@ -223,6 +224,26 @@
             _closeCurrentImage: function _closeCurrentImage() {
                 this._removeBigImage(true);
                 this.previousImage = null;
+            },
+            /**
+            * Sets the appropriate position of the arrow
+            * @method _setArrowPosition
+            * @param classNo{Number} The class no
+            * @private
+            */
+            _setArrowPosition: function _setArrowPosition(classNo) {
+                this._removeArrowPositionClasses();
+                $('.arrow-container').addClass('left-' + classNo);
+            },
+            /**
+            * Removes all the position classes from the arrow
+            * @method _removeArrowPositionClasses
+            * @private
+            */
+            _removeArrowPositionClasses: function _removeArrowPositionClasses() {
+                $('.arrow-container').removeClass('left-0')
+                                      .removeClass('left-1')
+                                      .removeClass('left-2');
             },
             /**
             * Returns whether the 2 images are on different rows or not
