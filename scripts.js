@@ -92,7 +92,7 @@
             * @public
             */
             _appendImageAfter: function _appendImageAfter(imageDiv, imageNo) {
-                var screenHeight = screen.height,
+                var screenHeight = window.innerHeight,
                     currentScrollTop = $(document).scrollTop(),
                     $currentTarget = this.currentImage,
                     imageTop = $currentTarget.position().top,
@@ -113,7 +113,7 @@
                 if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
                     // Not animating the div
                     $('.big-image-container').css('height', '660px');
-
+                   // $('.big-image-container').fadeIn();
                 } else {
                     // Animating the div
                     $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
@@ -157,7 +157,7 @@
                     $currentTarget = this.currentImage,
                     currentImageNo, imageWidth = $currentTarget.width(),
                     parentContainerWidth = $currentTarget.parent().width(),
-                    imagesInARow = parentContainerWidth / imageWidth;
+                    imagesInARow = Math.round(parentContainerWidth / imageWidth);
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
@@ -172,7 +172,7 @@
             _isDifferentRow: function _isDifferentRow(image1, image2, $currentTarget) {
                 var imageWidth = $currentTarget.width(),
                     parentContainerWidth = $currentTarget.parent().width(),
-                    imagesInARow = parentContainerWidth / imageWidth;
+                    imagesInARow = Math.round(parentContainerWidth / imageWidth);
 
                 if (Math.floor(image1 / imagesInARow) === Math.floor(image2 / imagesInARow)) {
                     return false;
