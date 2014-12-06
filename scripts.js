@@ -83,7 +83,7 @@
             * @public
             */
             _getBigImageDiv: function _getBigImageDiv() {
-                var $bigImage = $('<div  id="big-image-container" class="big-image-container"><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3">D</div></div></div></div>');
+                var $bigImage = $('<div  id="big-image-container" class="big-image-container"><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0 thumbnail">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1 thumbnail">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2 thumbnail">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3 thumbnail">D</div></div></div></div>');
                 return $bigImage;
             },
             /**
@@ -180,6 +180,40 @@
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
                 this.previousImage = currentImageNo;
                 // bind events on the big image
+                this._bindBigImageEvents();
+            },
+            /**
+            * Binds the events on the big image
+            * @method _bindBigImageEvents
+            * @private
+            */
+            _bindBigImageEvents: function _bindBigImageEvents() {
+                $('.big-image-close-button').on('click', $.proxy(this._closeCurrentImage, this));
+                $('.thumbnail').on('click', $.proxy(this._onThumbnailClicked, this));
+            },
+            /**
+            * Changes the background image of the header based on which thumbnail was clicked
+            * @method _onThumbnailClicked
+            * @private
+            */
+            _onThumbnailClicked: function _onThumbnailClicked(event) {
+                var $currentTarget = $(event.currentTarget),
+                    currentThumbnailNo;
+
+                currentThumbnailNo = parseInt($currentTarget.attr('id').slice(27, 28));
+                this._removeThumbnailClasses();
+                $('.big-image-header').addClass('color-' + currentThumbnailNo);
+            },
+            /**
+            * Removes all the thumbail classes from the big image header
+            * @method _closeCurrentImage
+            * @private
+            */
+            _removeThumbnailClasses: function _removeThumbnailClasses() {
+                $('.big-image-header').removeClass('color-0')
+                                      .removeClass('color-1')
+                                      .removeClass('color-2')
+                                      .removeClass('color-3');
             },
             /**
             * Closes the current image
