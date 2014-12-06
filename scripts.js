@@ -71,7 +71,7 @@
 
                 // removing the previous big container
                 if (this.previousImage !== currentImageNo) {
-                    this._removeBigImage();
+                    this._removeBigImage(this._isDifferentRow(this.previousImage, currentImageNo, $currentTarget));
                     this._onRemoveAnimationComplete();
                 }
             },
@@ -98,20 +98,35 @@
                     imageTop = $currentTarget.position().top,
                     imageHeight = $currentTarget.height(),
                     bigImageHeight = JqueryImageGalleryView.BIG_IMAGE_HEIGHT,
-                    previousImageScrollTop = 0;
+                    previousImageScrollTop = 0,
+                    isDifferentRow = this._isDifferentRow(this.previousImage, imageNo, this.currentImage);
 
                 // Check to see if there was a previous image and then reduce that from the scroll top
                 if (this.previousImage !== null && this.previousImage !== undefined &&
-                    this.previousImage < imageNo && this._isDifferentRow(this.previousImage, imageNo, this.currentImage)) {
+                    this.previousImage < imageNo && isDifferentRow) {
                     previousImageScrollTop = 660;
                 }
-                imageDiv.insertAfter($('.image-container-' + imageNo));
-                // Animating the scroll
-                $('html, body').animate({
-                    scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
-                }, 1000);
+
+                // Checking if same row then animate remove and then add
+                if (isDifferentRow === false) {
+                    $('html, body').animate({
+                        scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
+                    }, 1000);
+
+                    $('.big-image-container').remove();
+
+                    imageDiv.insertAfter($('.image-container-' + imageNo));
+                } else {
+
+                    imageDiv.insertAfter($('.image-container-' + imageNo));
+                    // Animating the scroll
+                    $('html, body').animate({
+                        scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
+                    }, 1000);
+                }
                 console.log('started adding');
-                if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
+                if (((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) ||
+                    this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false) {
                     // Not animating the div
                     $('.big-image-container').css('height', '660px');
                     // $('.big-image-container').fadeIn();
@@ -130,9 +145,10 @@
             /**
             * Removes the big image
             * @method _removeBigImage
+            * @param bNeedAnimation{Boolean} If animation is required
             * @private
             */
-            _removeBigImage: function _removeBigImage() {
+            _removeBigImage: function _removeBigImage(bNeedAnimation) {
                 var $bigImageContainer = $('.big-image-container');
                 /*
                 if ($bigImageContainer.length !== 0) {
@@ -144,11 +160,14 @@
                 $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
                 }
                 */
-                $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
-                    console.log('removed');
-                    $(this).remove();
-                });
-                //$bigImageContainer.remove();
+                if (bNeedAnimation === true) {
+                    $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                        console.log('removed');
+                        $(this).remove();
+                    });
+                } else {
+                    //$bigImageContainer.remove();
+                }
             },
             /**
             * Handles the event of remove animation complete
