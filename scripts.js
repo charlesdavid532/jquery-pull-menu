@@ -44,6 +44,28 @@
             _bindEvents: function _bindEvents() {
                 $('.image-container').on('click', $.proxy(this._onImageClick, this));
                 // $(document).on(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE, $.proxy(this._onRemoveAnimationComplete, this));
+                $('.image-container').on('mouseover', $.proxy(this._onImageMouseOver, this));
+                $('.image-container').on('mouseout', $.proxy(this._onImageMouseOut, this));
+            },
+            /**
+            * Handles the mouse over event of the image
+            * @method _onImageMouseOver
+            * @param event{Object} The event object
+            * @private
+            */
+            _onImageMouseOver: function _onImageMouseOver(event) {
+                //$(event.currentTarget).animate({ 'zoom': 1.2 }, 400);
+                //$('.image-gallery-container').css('width', '1280px');
+            },
+            /**
+            * Handles the mouse out event of the image
+            * @method _onImageMouseOut
+            * @param event{Object} The event object
+            * @private
+            */
+            _onImageMouseOut: function _onImageMouseOut(event) {
+                //$(event.currentTarget).animate({ 'zoom': 1 }, 400);
+                //$('.image-gallery-container').css('width', '1200px');
             },
             /**
             * Handles the click event of the image
