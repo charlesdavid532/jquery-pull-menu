@@ -73,6 +73,8 @@
                 if (this.previousImage !== currentImageNo) {
                     this._removeBigImage(this._isDifferentRow(this.previousImage, currentImageNo, $currentTarget));
                     this._onRemoveAnimationComplete();
+                } else {
+                    this._closeCurrentImage();
                 }
             },
             /**
@@ -108,7 +110,7 @@
                 }
 
                 // Checking if same row then animate remove and then add
-                if (isDifferentRow === false) {
+                if (isDifferentRow === false && this.previousImage !== null && this.previousImage !== undefined) {
                     $('html, body').animate({
                         scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
                     }, 1000);
@@ -125,11 +127,12 @@
                     }, 1000);
                 }
                 console.log('started adding');
-                if (((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) ||
-                    this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false) {
+                if ((((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) ||
+                    this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false)
+                    && (this.previousImage !== null && this.previousImage !== undefined)) {
                     // Not animating the div
                     $('.big-image-container').css('height', '660px');
-                    // $('.big-image-container').fadeIn();
+                    // TODO:: Should add a check here to see if the previous image is not visible I can animate
                 } else {
                     // Animating the div
                     $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
@@ -150,22 +153,14 @@
             */
             _removeBigImage: function _removeBigImage(bNeedAnimation) {
                 var $bigImageContainer = $('.big-image-container');
-                /*
-                if ($bigImageContainer.length !== 0) {
-                $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
-                $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
-                $(this).remove();
-                });
-                } else {
-                $(document).trigger(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE);
-                }
-                */
+
                 if (bNeedAnimation === true) {
                     $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
                         console.log('removed');
                         $(this).remove();
                     });
                 } else {
+                    // This removal is taking place inside the add function
                     //$bigImageContainer.remove();
                 }
             },
@@ -185,6 +180,15 @@
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
                 this.previousImage = currentImageNo;
                 // bind events on the big image
+            },
+            /**
+            * Closes the current image
+            * @method _closeCurrentImage
+            * @private
+            */
+            _closeCurrentImage: function _closeCurrentImage() {
+                this._removeBigImage(true);
+                this.previousImage = null;
             },
             /**
             * Returns whether the 2 images are on different rows or not
