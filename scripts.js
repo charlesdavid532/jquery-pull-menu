@@ -110,14 +110,16 @@
                 $('html, body').animate({
                     scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
                 }, 1000);
+                console.log('started adding');
                 if ((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) {
                     // Not animating the div
                     $('.big-image-container').css('height', '660px');
-                   // $('.big-image-container').fadeIn();
+                    // $('.big-image-container').fadeIn();
                 } else {
                     // Animating the div
                     $('.big-image-container').css('height', '0px').animate({ 'height': '660px' }, 1000, function () {
                         //  $(window).scrollTop($(this).offset().top);
+                        console.log('added');
 
                     });
                 }
@@ -143,6 +145,7 @@
                 }
                 */
                 $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
+                    console.log('removed');
                     $(this).remove();
                 });
                 //$bigImageContainer.remove();
