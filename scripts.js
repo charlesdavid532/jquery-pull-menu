@@ -196,10 +196,13 @@
                     $currentTarget = this.currentImage,
                     currentImageNo, imageWidth = $currentTarget.width(),
                     parentContainerWidth = $currentTarget.parent().width(),
-                    imagesInARow = Math.round(parentContainerWidth / imageWidth);
+                    imagesInARow = Math.round(parentContainerWidth / imageWidth),
+                    imageToapendAfter;
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, $currentTarget.attr('id').length));
-                this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
+                imageToapendAfter = (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1);
+                imageToapendAfter = (imageToapendAfter > $('.image-container').length - 1) ? $('.image-container').length - 1: imageToapendAfter;
+                this._appendImageAfter($bigImageDiv, imageToapendAfter);
                 this._setArrowPosition(currentImageNo % imagesInARow);
                 this.previousImage = currentImageNo;
                 // bind events on the big image
