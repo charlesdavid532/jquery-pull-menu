@@ -87,7 +87,7 @@
                 var $currentTarget = $(event.currentTarget),
                     currentImageNo;
 
-                currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
+                currentImageNo = parseInt($currentTarget.attr('id').slice(16, $currentTarget.attr('id').length));
                 this.currentImage = $currentTarget;
                 console.log('current image is:' + currentImageNo);
 
@@ -198,7 +198,7 @@
                     parentContainerWidth = $currentTarget.parent().width(),
                     imagesInARow = Math.round(parentContainerWidth / imageWidth);
 
-                currentImageNo = parseInt($currentTarget.attr('id').slice(16, 17));
+                currentImageNo = parseInt($currentTarget.attr('id').slice(16, $currentTarget.attr('id').length));
                 this._appendImageAfter($bigImageDiv, (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1));
                 this._setArrowPosition(currentImageNo % imagesInARow);
                 this.previousImage = currentImageNo;
@@ -223,7 +223,7 @@
                 var $currentTarget = $(event.currentTarget),
                     currentThumbnailNo;
 
-                currentThumbnailNo = parseInt($currentTarget.attr('id').slice(27, 28));
+                currentThumbnailNo = parseInt($currentTarget.attr('id').slice(27, $currentTarget.attr('id').length));
                 this._removeThumbnailClasses();
                 $('.big-image-header').addClass('color-' + currentThumbnailNo);
             },
