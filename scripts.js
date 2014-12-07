@@ -74,13 +74,12 @@
             * @private
             */
             _onImageClick: function _onImageClick(event) {
-                console.log('image clicked');
-
                 this._appendBigImageDiv(event);
             },
             /**
             * Appends the big image div at appropriate location
             * @method _appendBigImageDiv
+            * @param event{Object} The event object
             * @private
             */
             _appendBigImageDiv: function _appendBigImageDiv(event) {
@@ -105,7 +104,7 @@
             * @public
             */
             _getBigImageDiv: function _getBigImageDiv() {
-                var $bigImage = $('<div  id="big-image-container" class="big-image-container"><div id="arrow-container" class="arrow-container"></div><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0 thumbnail">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1 thumbnail">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2 thumbnail">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3 thumbnail">D</div></div></div></div>');
+                var $bigImage = $('<div  id="big-image-container" class="big-image-container current"><div id="arrow-container" class="arrow-container"></div><div id="big-image-header" class="big-image-header color-0"><div id="big-image-close-button" class="big-image-close-button"></div><div id="big-image-title" class="big-image-title">TITLE</div><div id="big-image-sub-heading" class="big-image-sub-heading">SUB HEADING</div></div><div id="big-image-footer" class="big-image-footer"><div id="big-image-footer-text-container" class="big-image-footer-text-container"><div id="big-image-footer-text-0" class="big-image-footer-text-0">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-1" class="big-image-footer-text-1">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-2" class="big-image-footer-text-2">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div><div id="big-image-footer-text-3" class="big-image-footer-text-3">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </div></div><div id="big-image-footer-thumbnail-container" class="big-image-footer-thumbnail-container"><div id="big-image-footer-thumbnail-0" class="big-image-footer-thumbnail-0 thumbnail">A</div><div id="big-image-footer-thumbnail-1" class="big-image-footer-thumbnail-1 thumbnail">B</div><div id="big-image-footer-thumbnail-2" class="big-image-footer-thumbnail-2 thumbnail">C</div><div id="big-image-footer-thumbnail-3" class="big-image-footer-thumbnail-3 thumbnail">D</div></div></div></div>');
                 return $bigImage;
             },
             /**
@@ -137,9 +136,17 @@
                         scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
                     }, 1000);
 
-                    $('.big-image-container').remove();
+                    $('.big-image-container').removeClass('current');
 
                     imageDiv.insertAfter($('.image-container-' + imageNo));
+                    $('.big-image-container.current').css('height', '660px');
+                    var $bigImages = $('.big-image-container');
+                    for (var i = 0; i < $bigImages.length; i++) {
+                        if ($($bigImages[i]).hasClass('current') === false) {
+                            $bigImages[i].remove();
+                        }
+                    }
+
                 } else {
 
                     imageDiv.insertAfter($('.image-container-' + imageNo));
@@ -153,11 +160,11 @@
                     this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false)
                     && (this.previousImage !== null && this.previousImage !== undefined)) {
                     // Not animating the div
-                    $('.big-image-container').css('height', '660px');
+                    $('.big-image-container.current').css('height', '660px');
                     // TODO:: Should add a check here to see if the previous image is not visible I can animate
                 } else {
                     // Animating the div
-                    $('.big-image-container').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
+                    $('.big-image-container.current').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
                         //  $(window).scrollTop($(this).offset().top);
                         console.log('added');
 
@@ -176,6 +183,7 @@
             _removeBigImage: function _removeBigImage(bNeedAnimation) {
                 var $bigImageContainer = $('.big-image-container');
 
+                $bigImageContainer.removeClass('current');
                 if (bNeedAnimation === true) {
                     $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
                         console.log('removed');
@@ -201,7 +209,7 @@
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, $currentTarget.attr('id').length));
                 imageToapendAfter = (currentImageNo + imagesInARow - (currentImageNo % imagesInARow) - 1);
-                imageToapendAfter = (imageToapendAfter > $('.image-container').length - 1) ? $('.image-container').length - 1: imageToapendAfter;
+                imageToapendAfter = (imageToapendAfter > $('.image-container').length - 1) ? $('.image-container').length - 1 : imageToapendAfter;
                 this._appendImageAfter($bigImageDiv, imageToapendAfter);
                 this._setArrowPosition(currentImageNo % imagesInARow);
                 this.previousImage = currentImageNo;
