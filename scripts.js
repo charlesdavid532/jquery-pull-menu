@@ -87,7 +87,6 @@
 
                 currentImageNo = parseInt($currentTarget.attr('id').slice(16, $currentTarget.attr('id').length));
                 this.currentImage = $currentTarget;
-                console.log('current image is:' + currentImageNo);
 
                 // removing the previous big container
                 if (this.previousImage !== currentImageNo) {
@@ -126,7 +125,7 @@
                 // Check to see if there was a previous image and then reduce that from the scroll top
                 if (this.previousImage !== null && this.previousImage !== undefined &&
                     this.previousImage < imageNo && isDifferentRow) {
-                    previousImageScrollTop = 660;
+                    previousImageScrollTop = bigImageHeight;
                 }
 
                 // Checking if same row then animate remove and then add
@@ -154,7 +153,7 @@
                         scrollTop: imageTop - 40 + imageHeight - previousImageScrollTop
                     }, 1000);
                 }
-                console.log('started adding');
+                
                 if ((((imageTop + imageHeight + bigImageHeight + 10) > (currentScrollTop + screenHeight)) ||
                     this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false)
                     && (this.previousImage !== null && this.previousImage !== undefined)) {
@@ -188,7 +187,6 @@
                 $bigImageContainer.removeClass('current');
                 if (bNeedAnimation === true) {
                     $bigImageContainer.animate({ 'height': '0px' }, 1000, function () {
-                        console.log('removed');
                         $(this).remove();
                     });
                 } else {
