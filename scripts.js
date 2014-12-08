@@ -43,7 +43,6 @@
             */
             _bindEvents: function _bindEvents() {
                 $('.image-container').on('click', $.proxy(this._onImageClick, this));
-                // $(document).on(JqueryImageGalleryView.REMOVE_ANIMATION_COMPLETE, $.proxy(this._onRemoveAnimationComplete, this));
                 $('.image-container').on('mouseover', $.proxy(this._onImageMouseOver, this));
                 $('.image-container').on('mouseout', $.proxy(this._onImageMouseOut, this));
             },
@@ -165,9 +164,6 @@
                 } else {
                     // Animating the div
                     $('.big-image-container.current').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
-                        //  $(window).scrollTop($(this).offset().top);
-                        console.log('added');
-
                     });
                 }
                 // Is scrolling to that div necessary....yes
