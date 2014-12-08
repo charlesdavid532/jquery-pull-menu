@@ -159,8 +159,14 @@
                     this._isDifferentRow(this.previousImage, imageNo, this.currentImage) === false)
                     && (this.previousImage !== null && this.previousImage !== undefined)) {
                     // Not animating the div
-                    $('.big-image-container.current').css('height', '660px');
+                    //$('.big-image-container.current').css('height', '660px');
                     // TODO:: Should add a check here to see if the previous image is not visible I can animate
+                    if (isDifferentRow) {
+                        $('.big-image-container.current').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
+                        });
+                    } else {
+                        $('.big-image-container.current').css('height', '660px');
+                    }
                 } else {
                     // Animating the div
                     $('.big-image-container.current').css({ 'height': '0px' }).animate({ 'height': '660px' }, 1000, function () {
